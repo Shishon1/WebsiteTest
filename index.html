@@ -1,40 +1,155 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Hem ❤️</title>
-<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>body { display: none; }</style>
+<title>Home ❤️</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { 
+  display: none; 
+  margin: 0; 
+  font-family: 'Poppins', sans-serif; 
+  background: linear-gradient(135deg, #ff758c, #ff7eb3); 
+  color: white; 
+  height: 100vh; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  overflow: hidden; /* for hearts */
+}
+
+.container {
+  text-align: center;
+  background: rgba(255,255,255,0.15);
+  padding: 40px;
+  border-radius: 25px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+p {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+}
+
+/* Navigation */
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  text-decoration: none;
+  font-weight: 600;
+  color: white;
+  position: relative;
+  padding: 5px 0;
+  transition: 0.3s;
+}
+
+nav a::after {
+  content: '';
+  display: block;
+  width: 0%;
+  height: 2px;
+  background: white;
+  transition: 0.3s;
+}
+
+nav a:hover::after { width: 100%; }
+
+/* Hearts animation */
+.heart {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: red;
+  transform: rotate(-45deg);
+  animation: float 5s linear infinite;
+  left: 50%;
+  bottom: -50px;
+}
+
+.heart::before,
+.heart::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: red;
+  border-radius: 50%;
+}
+
+.heart::before { top: -10px; left: 0; }
+.heart::after { left: 10px; top: 0; }
+
+@keyframes float {
+  0% {
+    transform: translateX(0) translateY(0) rotate(-45deg) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(calc(-50px + 100px * var(--rand))) translateY(-200px) rotate(-45deg) scale(1.2);
+  }
+  100% {
+    transform: translateX(calc(-50px + 100px * var(--rand))) translateY(-600px) rotate(-45deg) scale(0.8);
+    opacity: 0;
+  }
+}
+</style>
 
 <script>
-const password = "mitthemliga123";
-
+// Password protection
+const password = "KatuSimon0606";
 if(sessionStorage.getItem("authed") === "true"){
-    document.addEventListener("DOMContentLoaded", ()=>{ document.body.style.display="block"; });
+    document.addEventListener("DOMContentLoaded", ()=>{ document.body.style.display="flex"; });
 } else {
-    const userPass = prompt("Ange lösenord:");
+    const userPass = prompt("Enter password:");
     if(userPass === password){
         sessionStorage.setItem("authed","true");
-        document.addEventListener("DOMContentLoaded", ()=>{ document.body.style.display="block"; });
+        document.addEventListener("DOMContentLoaded", ()=>{ document.body.style.display="flex"; });
     } else {
-        document.write("<h1>Åtkomst nekad</h1>");
+        document.write("<h1 style='text-align:center; margin-top:50px;'>err bad secret</h1>");
         window.stop();
     }
 }
-</script>
 
+// Hearts animation
+function createHeart() {
+  const heart = document.createElement('div');
+  heart.classList.add('heart');
+  heart.style.left = Math.random() * 100 + 'vw';
+  heart.style.setProperty('--rand', Math.random());
+  heart.style.width = (10 + Math.random()*15) + 'px';
+  heart.style.height = heart.style.width;
+  document.body.appendChild(heart);
+  setTimeout(() => { heart.remove(); }, 5000);
+}
+
+setInterval(createHeart, 300);
+</script>
 </head>
+
 <body>
 <div class="container">
-<h1>Hej älskling! 💖</h1>
-<p>Välkommen till vår privata plats på nätet.</p>
-<nav>
-    <a href="index.html">Hem</a>
-    <a href="about.html">Om Dig</a>
-    <a href="gallery.html">Bilder</a>
-    <a href="contact.html">Kontakt</a>
-</nav>
+  <h1>Hello darling! 💖</h1>
+  <p>Welcome to our private little corner of the internet.</p>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="contact.html">Contact</a>
+  </nav>
 </div>
 </body>
 </html>

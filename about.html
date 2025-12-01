@@ -1,30 +1,96 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Om Dig ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About You ❤️</title>
 <link rel="stylesheet" href="style.css">
-<style>body { display: none; }</style>
+<style>
+body { display: none; font-family: sans-serif; }
+
+/* Container styling */
+.container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 40px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 25px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: #ff416c;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* Navigation */
+nav {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  text-decoration: none;
+  font-weight: 600;
+  color: #ff416c;
+  position: relative;
+  padding: 5px 0;
+  transition: 0.3s;
+}
+
+nav a::after {
+  content: '';
+  display: block;
+  width: 0%;
+  height: 2px;
+  background: #ff416c;
+  transition: 0.3s;
+}
+
+nav a:hover::after { width: 100%; }
+</style>
 
 <script>
-const password = "mitthemliga123";
-if(sessionStorage.getItem("authed") === "true"){document.addEventListener("DOMContentLoaded", ()=>{document.body.style.display="block";});} 
-else {const userPass = prompt("Ange lösenord:"); if(userPass===password){sessionStorage.setItem("authed","true"); document.addEventListener("DOMContentLoaded", ()=>{document.body.style.display="block";});} 
-else {document.write("<h1>Åtkomst nekad</h1>"); window.stop();}}
+// Password protection
+const password = "KatuSimon0606";
+if(sessionStorage.getItem("authed") === "true"){
+  document.addEventListener("DOMContentLoaded", ()=>{document.body.style.display="block";});
+} else {
+  const userPass = prompt("Enter password:");
+  if(userPass === password){
+    sessionStorage.setItem("authed","true");
+    document.addEventListener("DOMContentLoaded", ()=>{document.body.style.display="block";});
+  } else {
+    document.write("<h1 style='text-align:center; margin-top:50px;'>err bad secret</h1>");
+    window.stop();
+  }
+}
 </script>
 
 </head>
 <body>
 <div class="container">
-<h1>Om Dig</h1>
-<p>Du är fantastisk, unik och får mig alltid att le. 💕</p>
-<p>Jag skapade den här sidan bara för dig, så att du kan se allt vi delar tillsammans.</p>
-<nav>
-    <a href="index.html">Hem</a>
-    <a href="about.html">Om Dig</a>
-    <a href="gallery.html">Bilder</a>
-    <a href="contact.html">Kontakt</a>
-</nav>
+  <h1>About You</h1>
+  <p>You are amazing, unique, and always make me smile. 💕</p>
+  <p>I created this page just for you, so you can see everything we share together.</p>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="contact.html">Contact</a>
+  </nav>
 </div>
 </body>
 </html>

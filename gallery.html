@@ -1,37 +1,241 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Bilder ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Photos & Videos ❤️</title>
 <link rel="stylesheet" href="style.css">
-<style>body { display: none; }</style>
+<style>
+body { display: none; font-family: sans-serif; }
+
+/* Container */
+.container {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 40px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 25px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+/* Titles */
+h1 {
+  font-size: 2.5rem;
+  color: #ff416c;
+  margin-bottom: 20px;
+}
+
+/* Navigation */
+nav {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  text-decoration: none;
+  font-weight: 600;
+  color: #ff416c;
+  position: relative;
+  padding: 5px 0;
+  transition: 0.3s;
+}
+
+nav a::after {
+  content: '';
+  display: block;
+  width: 0%;
+  height: 2px;
+  background: #ff416c;
+  transition: 0.3s;
+}
+
+nav a:hover::after { width: 100%; }
+
+/* Gallery grid */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.gallery-item {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  cursor: pointer;
+  position: relative;
+}
+
+.gallery-item img,
+.gallery-item video {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  transition: transform 0.3s, filter 0.3s;
+}
+
+.gallery-item:hover img,
+.gallery-item:hover video {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+/* Lightbox */
+#lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#lightbox.show { display: flex; opacity: 1; }
+
+#media-container {
+  max-width: 90%;
+  max-height: 70%;
+}
+
+#media-container img,
+#media-container video {
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  margin-bottom: 15px;
+}
+
+/* Caption */
+#caption {
+  color: white;
+  font-size: 1.1rem;
+  text-align: center;
+  max-width: 90%;
+  opacity: 0;
+  transition: opacity 0.3s ease 0.1s;
+}
+
+#lightbox.show #caption { opacity: 1; }
+
+/* Close button */
+#close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 2.5rem;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+  font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 900px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .gallery { grid-template-columns: 1fr; } }
+</style>
 
 <script>
-const password = "mitthemliga123";
-if(sessionStorage.getItem("authed") === "true"){document.addEventListener("DOMContentLoaded", ()=>{document.body.style.display="block";});} 
-else {const userPass = prompt("Ange lösenord:"); if(userPass===password){sessionStorage.setItem("authed","true"); document.addEventListener("DOMContentLoaded", ()=>{document.body.style.display="block";});} 
-else {document.write("<h1>Åtkomst nekad</h1>"); window.stop();}}
+// Password protection
+const password = "KatuSimon0606";
+if(sessionStorage.getItem("authed") === "true"){
+  document.addEventListener("DOMContentLoaded", ()=>{document.body.style.display="block";});
+} else {
+  const userPass = prompt("Enter password:");
+  if(userPass === password){
+    sessionStorage.setItem("authed","true");
+    document.addEventListener("DOMContentLoaded", ()=>{document.body.style.display="block";});
+  } else {
+    document.write("<h1 style='text-align:center; margin-top:50px;'>err bad secret</h1>");
+    window.stop();
+  }
+}
 </script>
-
 </head>
+
 <body>
 <div class="container">
-  <h1>Våra minnen</h1>
-  <p>Här är några bilder från våra bästa stunder.</p>
+  <h1>Our Memories</h1>
+  <p>Click on a photo or video to view in fullscreen!</p>
 
   <div class="gallery">
-    <div class="gallery-item"><img src="Untitled.png" alt="Bild 1"></div>
-    <div class="gallery-item"><img src="Untitled.png" alt="Bild 2"></div>
-    <div class="gallery-item"><img src="WIN_20240925_21_44_25_Pro.jpg" alt="Bild 3"></div>
-    <div class="gallery-item"><img src="WIN_20240925_21_44_25_Pro.jpg" alt="Bild 4"></div>
-    <div class="gallery-item"><img src="WIN_20240925_21_44_25_Pro.jpg" alt="Bild 5"></div>
-    <div class="gallery-item"><img src="Untitled.png" alt="Bild 6"></div>
+    <!-- Images -->
+    <div class="gallery-item" data-type="image" data-caption="First image: Cozy cat!">
+      <img src="Untitled.png" alt="Image 1">
+    </div>
+    <div class="gallery-item" data-type="image" data-caption="Second image: Sunset!">
+      <img src="Untitled.png" alt="Image 2">
+    </div>
+
+    <!-- Videos -->
+    <div class="gallery-item" data-type="video" data-caption="Video 1: A little cat playing">
+      <video src="video1.mp4" muted></video>
+    </div>
+    <div class="gallery-item" data-type="video" data-caption="Video 2: Beach walk">
+      <video src="video2.mp4" muted></video>
+    </div>
   </div>
 
   <nav>
-    <a href="index.html">Hem</a>
-    <a href="about.html">Om Dig</a>
-    <a href="gallery.html">Bilder</a>
-    <a href="contact.html">Kontakt</a>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="counter.html">Our Relationship</a>
   </nav>
 </div>
+
+<!-- Lightbox -->
+<div id="lightbox">
+  <span id="close">&times;</span>
+  <div id="media-container"></div>
+  <div id="caption"></div>
+</div>
+
+<script>
+// Lightbox functionality
+const lightbox = document.getElementById('lightbox');
+const mediaContainer = document.getElementById('media-container');
+const captionText = document.getElementById('caption');
+const closeBtn = document.getElementById('close');
+
+document.querySelectorAll('.gallery-item').forEach(item => {
+  item.addEventListener('click', () => {
+    mediaContainer.innerHTML = '';
+    const type = item.dataset.type;
+
+    if(type === 'image'){
+      const img = document.createElement('img');
+      img.src = item.querySelector('img').src;
+      mediaContainer.appendChild(img);
+    } else if(type === 'video'){
+      const vid = document.createElement('video');
+      vid.src = item.querySelector('video').src;
+      vid.controls = true;
+      vid.autoplay = true;
+      mediaContainer.appendChild(vid);
+    }
+
+    captionText.textContent = item.dataset.caption;
+    lightbox.classList.add('show');
+  });
+});
+
+closeBtn.addEventListener('click', () => { lightbox.classList.remove('show'); });
+lightbox.addEventListener('click', e => { if(e.target === lightbox) lightbox.classList.remove('show'); });
+</script>
+
+</body>
+</html>
