@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<title>Om Dig ❤️</title>
+<link rel="stylesheet" href="style.css">
+<style>body { display: none; }</style>
+
+<script>
+const password = "mitthemliga123";
+if(sessionStorage.getItem("authed") === "true"){document.addEventListener("DOMContentLoaded", ()=>{document.body.style.display="block";});} 
+else {const userPass = prompt("Ange lösenord:"); if(userPass===password){sessionStorage.setItem("authed","true"); document.addEventListener("DOMContentLoaded", ()=>{document.body.style.display="block";});} 
+else {document.write("<h1>Åtkomst nekad</h1>"); window.stop();}}
+</script>
+
+</head>
+<body>
+<div class="container">
+<h1>Om Dig</h1>
+<p>Du är fantastisk, unik och får mig alltid att le. 💕</p>
+<p>Jag skapade den här sidan bara för dig, så att du kan se allt vi delar tillsammans.</p>
+<nav>
+    <a href="index.html">Hem</a>
+    <a href="about.html">Om Dig</a>
+    <a href="gallery.html">Bilder</a>
+    <a href="contact.html">Kontakt</a>
+</nav>
+</div>
+</body>
+</html>

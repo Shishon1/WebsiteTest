@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<title>Kontakt ❤️</title>
+<link rel="stylesheet" href="style.css">
+<style>body { display: none; }</style>
+
+<script>
+const password = "mitthemliga123";
+if(sessionStorage.getItem("authed") === "true"){document.addEventListener("DOMContentLoaded", ()=>{document.body.style.display="block";});} 
+else {const userPass = prompt("Ange lösenord:"); if(userPass===password){sessionStorage.setItem("authed","true"); document.addEventListener("DOMContentLoaded", ()=>{document.body.style.display="block";});} 
+else {document.write("<h1>Åtkomst nekad</h1>"); window.stop();}}
+</script>
+
+</head>
+<body>
+<div class="container">
+<h1>Kontakt</h1>
+<p>Du kan inte svara här, men detta är en plats för små meddelanden och kärlek. 💌</p>
+<p>Hoppas du gillar sidan och allt jag lagt här för dig!</p>
+<nav>
+    <a href="index.html">Hem</a>
+    <a href="about.html">Om Dig</a>
+    <a href="gallery.html">Bilder</a>
+    <a href="contact.html">Kontakt</a>
+</nav>
+</div>
+</body>
+</html>

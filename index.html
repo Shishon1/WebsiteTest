@@ -1,79 +1,40 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurang Namn</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Hem ❤️</title>
+<link rel="stylesheet" href="style.css">
+
+<style>body { display: none; }</style>
+
+<script>
+const password = "mitthemliga123";
+
+if(sessionStorage.getItem("authed") === "true"){
+    document.addEventListener("DOMContentLoaded", ()=>{ document.body.style.display="block"; });
+} else {
+    const userPass = prompt("Ange lösenord:");
+    if(userPass === password){
+        sessionStorage.setItem("authed","true");
+        document.addEventListener("DOMContentLoaded", ()=>{ document.body.style.display="block"; });
+    } else {
+        document.write("<h1>Åtkomst nekad</h1>");
+        window.stop();
+    }
+}
+</script>
+
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>Restaurang Namn</h1>
-            <nav>
-                <ul>
-                    <li><a href="#home">Hem</a></li>
-                    <li><a href="#menu">Meny</a></li>
-                    <li><a href="#about">Om Oss</a></li>
-                    <li><a href="#contact">Kontakt</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <section id="home" class="hero">
-        <div class="overlay">
-            <div class="container hero-content">
-                <h2>Välkommen till Restaurang Namn</h2>
-                <p>Upplev utsökt mat med färska råvaror i en modern atmosfär.</p>
-                <a href="#menu" class="btn">Se Menyn</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="menu">
-        <div class="container">
-            <h2>Meny</h2>
-            <div class="menu-items">
-                <div class="item">
-                    <h3>Förrätt</h3>
-                    <p>Exempel på förrätt</p>
-                    <span>95 kr</span>
-                </div>
-                <div class="item">
-                    <h3>Varmrätt</h3>
-                    <p>Exempel på varmrätt</p>
-                    <span>185 kr</span>
-                </div>
-                <div class="item">
-                    <h3>Dessert</h3>
-                    <p>Exempel på dessert</p>
-                    <span>75 kr</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="about">
-        <div class="container about-content">
-            <h2>Om Oss</h2>
-            <p>Vi är en familjeägd restaurang som fokuserar på högkvalitativ mat och en modern, trivsam atmosfär.</p>
-        </div>
-    </section>
-
-    <section id="contact">
-        <div class="container">
-            <h2>Kontakt</h2>
-            <p>Email: info@restaurangnamn.se</p>
-            <p>Telefon: 012-345 6789</p>
-            <a href="mailto:info@restaurangnamn.se" class="btn">Skicka Email</a>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Restaurang Namn. Alla rättigheter reserverade.</p>
-        </div>
-    </footer>
+<div class="container">
+<h1>Hej älskling! 💖</h1>
+<p>Välkommen till vår privata plats på nätet.</p>
+<nav>
+    <a href="index.html">Hem</a>
+    <a href="about.html">Om Dig</a>
+    <a href="gallery.html">Bilder</a>
+    <a href="contact.html">Kontakt</a>
+</nav>
+</div>
 </body>
 </html>
