@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Advent Calendar ❤️</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  :root{
+    --accent:#ff416c;
+    --bg1: #0f1022;
+    --bg2: #3b0f2f;
+  }
+  /* Hide until password accepted */
+  body{ display:none; margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: linear-gradient(180deg,var(--bg1),var(--bg2)); color:#fff; min-height:100vh; }
+
+  /* Page layout */
+  .wrap{
+    max-width:1100px;
+    margin:40px auto;
+    padding:28px;
+    box-sizing:border-box;
+  }
+  header{
+    text-align:center;
+    margin-bottom:18px;
+  }
+  header h1{
+    font-size:2rem;
+    margin:0;
+    color: #fff;
+    letter-spacing:0.2px;
+  }
+  header p{ margin:8px 0 0 0; opacity:0.85; }
+
+  /* Calendar grid */
+  .calendar {
+    display:grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap:14px;
+    margin-top:28px;
+  }
+
+ .box {
+  background: #e63946; /* wrapping paper base color */
+  color: #222;
+  height: 120px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  transform-origin: center;
+  transition: transform .18s ease, box-shadow .18s ease;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+
+
+}
+
+.box::before,
+.box::after {
+  content: '';
+  position: absolute;
+  background-color: var(--ribbon-color);
+}
+
+.box::before {
+  width: 100%;
+  height: 12px; /* horizontal ribbon */
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  z-index: 5;
+}
+
+.box::after {
+  width: 12px; /* vertical ribbon */
+  height: 100%;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  z-index: 5;
+}
+
+/* bow at center */
+.box .bow {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  background: radial-gradient(circle at 50% 50%, var(--ribbon-color) 40%, transparent 40%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 6;
+}
+
+.box .num {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: #006909;
+  z-index: 7;
+}
+
+.box .thumb {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  opacity: 1;
+  transition: opacity .25s ease, transform .3s ease;
+  transform: scale(1.05);
+  z-index: 2; /* behind ribbons */
+}
+
+.box.unlocked .thumb {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.box.locked {
+  filter: grayscale(.7) brightness(.7);
+}
+
+
+  /* Modal */
+  .modal {
+    position:fixed;
+    inset:0;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:2000;
+    background: rgba(0,0,0,0.6);
+    padding:20px;
+  }
+  .modal.show{ display:flex; }
+  .card {
+    width:100%;
+    max-width:760px;
+    background: linear-gradient(180deg, #fff, #fff);
+    color:#222;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,0.6);
+    transform-origin:center;
+    animation: popIn .28s ease;
+  }
+  @keyframes popIn{
+    from{ transform: translateY(20px) scale(.98); opacity:0; }
+    to{ transform: translateY(0) scale(1); opacity:1; }
+  }
+  .card .media {
+    width:100%;
+    height:360px;
+    background-position:center;
+    background-size:cover;
+    position:relative;
+  }
+  .card .body{
+    padding:22px;
+  }
+  .card .body h2{ margin:0 0 10px 0; font-size:1.3rem; color:var(--accent); }
+  .card .body p{ margin:0 0 12px 0; line-height:1.45; color:#333; }
+  .card .actions{ display:flex; gap:10px; justify-content:flex-end; padding:12px 22px 20px 22px; background:transparent; }
+  .btn {
+    border:none;
+    background:var(--accent);
+    color:#fff;
+    padding:10px 14px;
+    border-radius:10px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .btn.secondary{
+    background:transparent;
+    border:1px solid rgba(0,0,0,0.08);
+    color:#333;
+  }
+
+  /* Snow */
+  .snow{ pointer-events:none; position:fixed; inset:0; z-index:1000; }
+
+  /* Footer small */
+  footer { text-align:center; margin-top:18px; color:rgba(255,255,255,0.8); font-size:.9rem; }
+  /* Responsive */
+  @media (max-width:980px){
+    .calendar{ grid-template-columns: repeat(4, 1fr); }
+    .box{ height:110px; }
+    .card .media{ height:280px; }
+  }
+  @media (max-width:640px){
+    .calendar{ grid-template-columns: repeat(3, 1fr); gap:10px; }
+    .box{ height:95px; border-radius:12px; }
+    .card .media{ height:220px; }
+  }
+</style>
+
+<script>
+// PASSWORD PROTECTION (use this exact password)
+const password = "KatuSimon0606";
+if(sessionStorage.getItem("authed") === "true"){
+  document.addEventListener("DOMContentLoaded", ()=>{ document.body.style.display = "block"; });
+} else {
+  const userPass = prompt("Enter password:");
+  if(userPass === password){
+    sessionStorage.setItem("authed","true");
+    document.addEventListener("DOMContentLoaded", ()=>{ document.body.style.display = "block"; });
+  } else {
+    // custom error text
+    document.write("<h1 style='text-align:center; margin-top:50px;'>err bad secret</h1>");
+    window.stop();
+  }
+}
+
+// -------- CONTENT FOR EACH DAY --------
+// Edit these to write your own letter and task for each day.
+// Each entry has { title, message, task, img } .
+// img should point to calendar/boxes/boxN.jpg (you'll supply these files).
+const contents = [
+  /* index 0 -> day 1 */
+  { title: "Day 1", message: "Welcome to our special Advent! Open a box each day to find notes and maybe even tiny tasks.", task: "Share a photo of something that made you smile today.", img: "952-9520723_ftestickers-heart-lighteffect-luminous-pink-heart-1756494695.png" },
+  { title: "Day 2", message: "Every time I see your smile, I feel like the luckiest person alive. You make even ordinary days feel magical.", task: "Give me three things you love about us..", img: "952-9520723_ftestickers-heart-lighteffect-luminous-pink-heart-1756494695.png" },
+  { title: "Day 3", message: "I adore the little quirks that make you so unique. They make you, you, and I wouldn’t change a single thing.", task: "Share a photo of something that made you smile today.", img: "952-9520723_ftestickers-heart-lighteffect-luminous-pink-heart-1756494695.png" },
+  { title: "Day 4", message: "A tiny promise: coffee date soon?", task: "Take a 5 minute walk and text me a photo of something beautiful..", img: "calendar/boxes/box4.jpg" },
+  { title: "Day 5", message: "You mean the world to me.", task: "Give me three things you love about us.", img: "calendar/boxes/box5.jpg" },
+  { title: "Day 6", message: "Little reminder: breathe & smile.", task: "Take a 5 minute walk and text me a photo of something beautiful.", img: "calendar/boxes/box6.jpg" },
+  { title: "Day 7", message: "Weekend memory incoming.", task: "Plan a mini-date for this weekend and tell me one detail.", img: "calendar/boxes/box7.jpg" },
+  { title: "Day 8", message: "You brighten my days.", task: "Send me an emoji that sums up your day.", img: "calendar/boxes/box8.jpg" },
+  { title: "Day 9", message: "A tiny challenge: be silly.", task: "Record a 10s silly dance video and send it to me.", img: "calendar/boxes/box9.jpg" },
+  { title: "Day 10", message: "Hope you feel loved today.", task: "Write me one sentence about your favorite memory of us.", img: "calendar/boxes/box10.jpg" },
+  { title: "Day 11", message: "Mid-advent surprise!", task: "Share a photo of something that smells nice.", img: "calendar/boxes/box11.jpg" },
+  { title: "Day 12", message: "Small confession: I still get butterflies.", task: "Tell me what makes you feel butterflies.", img: "calendar/boxes/box12.jpg" },
+  { title: "Day 13", message: "Halfway to the big day.", task: "Send a song that reminds you of us.", img: "calendar/boxes/box13.jpg" },
+  { title: "Day 14", message: "Cozy night idea.", task: "Pick a movie for a cozy night in.", img: "calendar/boxes/box14.jpg" },
+  { title: "Day 15", message: "I love your smile.", task: "Send a selfie with your brightest smile.", img: "calendar/boxes/box15.jpg" },
+  { title: "Day 16", message: "A memory of our trip.", task: "Tell me one small detail you remember from our favorite trip.", img: "calendar/boxes/box16.jpg" },
+  { title: "Day 17", message: "Tiny warm hug through the screen.", task: "Describe your perfect warm drink.", img: "calendar/boxes/box17.jpg" },
+  { title: "Day 18", message: "A playful challenge.", task: "Send me your best knock-knock joke!", img: "calendar/boxes/box18.jpg" },
+  { title: "Day 19", message: "You are my favorite person to do nothing with.", task: "Tell me what 'doing nothing' with me feels like to you.", img: "calendar/boxes/box19.jpg" },
+  { title: "Day 20", message: "Almost there — little treats ahead.", task: "Name one small thing I can do to brighten your day tomorrow.", img: "calendar/boxes/box20.jpg" },
+  { title: "Day 21", message: "A special photo memory.", task: "Find and send the earliest photo we have together.", img: "calendar/boxes/box21.jpg" },
+  { title: "Day 22", message: "The final stretch.", task: "Tell me one thing you want us to do next year.", img: "calendar/boxes/box22.jpg" },
+  { title: "Day 23", message: "A note before the big day.", task: "Write a one-line love note for me right now.", img: "calendar/boxes/box23.jpg" },
+  { title: "Day 24", message: "Merry Christmas — open your final surprise ❤️", task: "Call me when you open this one.", img: "calendar/boxes/box24.jpg" }
+];
+
+// -----------------------------------------
+
+// helper: check if a day is unlocked (real life date check)
+// Only unlock Dec 1..24 of the current year.
+function isDayUnlocked(day) {
+  const now = new Date();
+  const year = now.getFullYear();
+  // target date is December day
+  const unlockDate = new Date(year, 11, day, 0,0,1); // month 11 = Dec
+  // If today is after or equal to unlockDate, unlocked.
+  // Also allow if current month > December (rare) — but normally fine.
+  return now >= unlockDate;
+}
+
+// Build calendar
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.createElement('div');
+  container.className = 'wrap';
+
+
+  // header
+  const header = document.createElement('header');
+  header.innerHTML = `<h1>Our Advent Calendar 🎄</h1><p>Open one box per day — boxes unlock on their real date (Dec 1–24).</p>`;
+  container.appendChild(header);
+
+  // calendar grid
+  const grid = document.createElement('div');
+  grid.className = 'calendar';
+
+  // create 24 boxes
+  for(let d=1; d<=24; d++){
+    const box = document.createElement('div');
+    box.className = 'box';
+    box.setAttribute('data-day', d);
+
+    const num = document.createElement('div');
+    num.className = 'num';
+    num.textContent = d;
+
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb';
+    // image path: calendar/boxes/box{d}.jpg (user should add these)
+    const imgSrc = contents[d - 1]?.img || `calendar/boxes/box${d}.jpg`;
+    thumb.style.backgroundImage = `url("${"Gift-High-Quality-PNG-4206219287.png"}")`;
+
+
+
+    const overlay = document.createElement('div');
+    overlay.className = 'lock-overlay';
+
+    const hint = document.createElement('div');
+    hint.className = 'hint';
+    hint.textContent = "Tap to open when unlocked";
+
+    // locked/unlocked
+    if(isDayUnlocked(d)) {
+      box.classList.add('unlocked');
+      overlay.innerHTML = `<div style="text-align:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="${'#fff'}" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15 8H9L12 2Z"></path></svg></div>`;
+    } else {
+      box.classList.add('locked');
+      // show date unlock hint
+      const unlockDate = new Date((new Date()).getFullYear(),11,d).toLocaleDateString(undefined, { month:'short', day:'numeric' });
+      overlay.innerHTML = `<div class="locked-text">Unlocked on ${unlockDate}</div>`;
+    }
+
+    box.appendChild(thumb);
+    box.appendChild(num);
+    box.appendChild(overlay);
+    box.appendChild(hint);
+
+    // click handler
+    box.addEventListener('click', () => {
+      if(!box.classList.contains('unlocked')) {
+        // small shake animation to give feedback
+        box.animate([
+          { transform: 'translateX(0)' },
+          { transform: 'translateX(-6px)' },
+          { transform: 'translateX(6px)' },
+          { transform: 'translateX(0)' }
+        ], { duration: 300, easing: 'ease' });
+        return;
+      }
+      openDay(d);
+    });
+
+    grid.appendChild(box);
+  }
+
+  container.appendChild(grid);
+
+  // footer
+  const footer = document.createElement('footer');
+  footer.innerHTML = `<small>Designed with ❤️ — your private calendar</small>`;
+  container.appendChild(footer);
+
+  document.body.appendChild(container);
+
+  // add snow canvas
+  addSnow();
+});
+
+// Modal functions
+function openDay(day) {
+  const idx = day - 1;
+  const info = contents[idx] || { title: `Day ${day}`, message:'No message yet.', task:'', img:`calendar/boxes/box${day}.jpg` };
+
+  // create modal if not exists
+  let modal = document.getElementById('advent-modal');
+  if(!modal) {
+    modal = document.createElement('div');
+    modal.id = 'advent-modal';
+    modal.className = 'modal';
+    modal.innerHTML = `
+      <div class="card" role="dialog" aria-modal="true">
+        <div class="media" id="modal-media"></div>
+        <div class="body">
+          <h2 id="modal-title"></h2>
+          <p id="modal-message"></p>
+          <p id="modal-task" style="font-weight:600; margin-top:8px;"></p>
+        </div>
+        <div class="actions">
+          <button class="btn secondary" id="close-modal">Close</button>
+          <button class="btn" id="done-modal">Mark done</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    // close controls
+    modal.querySelector('#close-modal').addEventListener('click', () => { modal.classList.remove('show'); });
+    modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('show'); });
+    modal.querySelector('#done-modal').addEventListener('click', () => {
+      // small confirmation and close
+      alert("Nice! Task marked done 💖");
+      modal.classList.remove('show');
+    });
+  }
+
+  // fill modal
+  const modalEl = document.getElementById('advent-modal');
+  modalEl.querySelector('#modal-title').textContent = info.title;
+  modalEl.querySelector('#modal-message').textContent = info.message;
+  modalEl.querySelector('#modal-task').textContent = info.task ? `Task: ${info.task}` : '';
+
+  // load image (with fallback)
+  const media = modalEl.querySelector('#modal-media');
+  media.style.backgroundImage = `url("${info.img}")`;
+  media.style.backgroundSize = 'cover';
+  media.style.backgroundPosition = 'center';
+
+  // show modal
+  modalEl.classList.add('show');
+}
+
+// small falling snow effect using canvas
+function addSnow(){
+  const canvas = document.createElement('canvas');
+  canvas.className = 'snow';
+  canvas.style.position = 'fixed';
+  canvas.style.top = '0';
+  canvas.style.left = '0';
+  canvas.style.width = '100%';
+  canvas.style.height = '100%';
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+
+  let particles = [];
+  function initParticles(){
+    particles = [];
+    const count = Math.floor(window.innerWidth / 12);
+    for(let i=0;i<count;i++){
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: 1 + Math.random()*3,
+        d: Math.random() * 100,
+        vx: (Math.random()-0.5) * 0.5,
+        vy: 0.5 + Math.random() * 1.2
+      });
+    }
+  }
+  initParticles();
+
+  function update(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    for(let i=0;i<particles.length;i++){
+      const p = particles[i];
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
+      p.x += p.vx;
+      p.y += p.vy;
+      if(p.y > canvas.height + 5){
+        p.y = -10;
+        p.x = Math.random()*canvas.width;
+      }
+      if(p.x > canvas.width + 10) p.x = -10;
+      if(p.x < -10) p.x = canvas.width + 10;
+    }
+    requestAnimationFrame(update);
+  }
+  update();
+
+  // handle resize
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    initParticles();
+  });
+}
+</script>
+</head>
+<body>
+<!-- Body is dynamically built after password check -->
+</body>
+</html>
