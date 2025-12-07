@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 24 Surprise ❤️</title>
+<style>
+  body, html {
+    margin:0; padding:0;
+    width:100%; height:100%;
+    font-family: 'Cursive', serif;
+    background: linear-gradient(180deg, #0f1022, #3b0f2f);
+    color:#fff;
+    overflow-x:hidden;
+  }
+  .container { max-width:900px; margin:0 auto; padding:20px; text-align:center; }
+  h1 { font-size:2rem; margin-bottom:5px; color:#ff416c; }
+  p { font-size:1.1rem; line-height:1.5; margin:0 0 10px 0;}
+  #step-progress { font-size:1rem; opacity:0.8; margin-bottom:15px; }
+  button {
+    margin-top:20px; padding:12px 24px;
+    font-size:1rem; border:none; border-radius:10px;
+    background: #ff416c; color:#fff; cursor:pointer;
+    transition: transform 0.2s ease;
+  }
+  button:hover { transform: scale(1.05); }
+
+  .step { display:none; margin-top:20px; }
+  .step.active { display:block; }
+
+  /* Slideshow */
+  .slideshow { position:relative; width:100%; max-width:700px; margin:0 auto; }
+  .slide { display:none; width:100%; height:400px; background-size:cover; background-position:center; border-radius:12px; }
+  .slide.active { display:block; }
+  .nav-buttons { margin-top:10px; }
+  .nav-buttons button { margin:5px; }
+
+  /* Swipe present */
+  .present {
+    width:250px; height:250px; background:#ff416c; margin:20px auto; border-radius:12px;
+    position: relative; touch-action: none; cursor: grab;
+  }
+  .present-note {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size:1.2rem; opacity:0; color:#fff; text-align:center; padding:10px;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Tap star */
+  .star-container { position:relative; width:150px; height:150px; margin:20px auto; }
+  .star {
+    width:40px; height:40px; background:yellow;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);
+    cursor:pointer; transition: transform 0.2s ease;
+  }
+  .star-message { margin-top:20px; font-size:1.2rem; opacity:0; transition: opacity 0.3s ease; }
+
+  /* Constellation */
+  .constellation { width:100%; height:400px; position:relative; margin:20px 0; }
+  .constellation svg { width:100%; height:100%; }
+  .star-dot { fill:#fff; r:4; opacity:0; transition: opacity 0.3s ease; }
+  #name-text { fill:#ff416c; font-size:32px; text-anchor:middle; opacity:0; }
+
+  /* Letter */
+  .letter {
+    width: 80%; max-width: 600px; margin: 40px auto;
+    padding: 20px 30px; background: #fff8f0;
+    border: 2px solid #ffcccc; border-radius: 12px;
+    font-family: 'Dancing Script', cursive; font-size: 1.4rem; line-height: 1.6;
+    color: #222; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+  }
+  #letter-done {
+    display:block; margin: 20px auto; padding: 10px 20px;
+    font-weight: 600; cursor:pointer; border-radius: 10px;
+    background: #ff416c; color:#fff; border: none;
+  }
+
+  /* Snow */
+  .snow{ pointer-events:none; position:fixed; inset:0; z-index:1000; }
+
+  @media(max-width:640px){
+    .slide { height:250px; }
+    .present { width:200px; height:200px; }
+    .constellation { height:250px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Merry Christmas ❤️</h1>
+  <p>Step into your special surprise journey!</p>
+  <p id="step-progress"></p>
+  <button id="start-btn">Start Your Surprise</button>
+
+  <!-- Step 1: Slideshow -->
+  <div class="step" id="step1">
+    <div class="slideshow">
+      <div class="slide active" style="background-image:url('pic1.jpg');"></div>
+      <div class="slide" style="background-image:url('pic2.jpg');"></div>
+      <div class="slide" style="background-image:url('pic3.jpg');"></div>
+      <div class="slide" style="background-image:url('pic4.jpg');"></div>
+      <div class="slide" style="background-image:url('pic5.jpg');"></div>
+      <div class="slide" style="background-image:url('pic6.jpg');"></div>
+      <div class="slide" style="background-image:url('pic7.jpg');"></div>
+      <div class="slide" style="background-image:url('pic8.jpg');"></div>
+      <div class="slide" style="background-image:url('pic9.jpg');"></div>
+      <div class="slide" style="background-image:url('pic10.jpg');"></div>
+    </div>
+    <div class="nav-buttons">
+      <button id="prev-slide">Previous</button>
+      <button id="next-slide">Next</button>
+      <button id="slideshow-done" style="display:none;">Next Step</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Swipe Present -->
+  <div class="step" id="step2">
+    <div class="present" id="present">
+      <div class="present-note">Here’s a little love note just for you ❤️</div>
+    </div>
+    <button id="present-done" style="display:none;">Next Step</button>
+  </div>
+
+  <!-- Step 3: Tap Star -->
+  <div class="step" id="step3">
+    <div class="star-container">
+      <div class="star" id="star"></div>
+    </div>
+    <div class="star-message" id="star-message">You light up my life! ✨</div>
+    <button id="star-done" style="display:none;">Next Step</button>
+  </div>
+
+  <!-- Step 4: Constellation -->
+  <div class="step" id="step4">
+    <div class="constellation" id="constellation">
+      <svg>
+        <circle class="star-dot" cx="50" cy="50"></circle>
+        <circle class="star-dot" cx="100" cy="80"></circle>
+        <circle class="star-dot" cx="150" cy="120"></circle>
+        <circle class="star-dot" cx="200" cy="160"></circle>
+        <circle class="star-dot" cx="250" cy="200"></circle>
+        <text x="50%" y="90%" id="name-text">Katu</text>
+      </svg>
+    </div>
+    <button id="constellation-done" style="display:none;">Next Step</button>
+  </div>
+
+  <!-- Step 5: Handwritten Letter -->
+  <div class="step" id="step5">
+    <div class="letter">
+      <p id="letter-text"></p>
+    </div>
+    <button id="letter-done">Finish</button>
+  </div>
+</div>
+
+<canvas class="snow" id="snow"></canvas>
+
+<script>
+/* Snow */
+const canvas = document.getElementById('snow');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+let particles=[];
+function initSnow(){ 
+  particles=[]; 
+  for(let i=0;i<150;i++){ 
+    particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:1+Math.random()*3,vx:(Math.random()-0.5)*0.5,vy:0.5+Math.random()*1.2})
+  }
+}
+initSnow();
+function drawSnow(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='rgba(255,255,255,0.9)';
+  for(let p of particles){
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fill();
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.y>canvas.height+5){p.y=-10;p.x=Math.random()*canvas.width;}
+    if(p.x>canvas.width+10)p.x=-10;
+    if(p.x<-10)p.x=canvas.width+10;
+  }
+  requestAnimationFrame(drawSnow);
+}
+drawSnow();
+window.addEventListener('resize',()=>{canvas.width=window.innerWidth; canvas.height=window.innerHeight; initSnow();});
+
+/* Step Management */
+const steps = ['step1','step2','step3','step4','step5'];
+let currentStep=0;
+const stepProgress = document.getElementById('step-progress');
+function updateProgress(){ stepProgress.textContent=`Step ${currentStep+1} of ${steps.length}`; }
+function showStep(index){
+  steps.forEach((s,i)=>{
+    const stepEl = document.getElementById(s);
+    stepEl.classList.toggle('active',i===index)
+  });
+  currentStep = index;
+  updateProgress();
+
+  if(index === 4){ // step5 = letter
+    i = 0;
+    letterEl.innerHTML = '';
+    typeLetter();
+  }
+}
+
+/* Start button */
+document.getElementById('start-btn').addEventListener('click',()=>{showStep(0);});
+
+/* Slideshow */
+const slides=document.querySelectorAll('.slide');
+let slideIndex=0;
+document.getElementById('next-slide').addEventListener('click',()=>{
+  slides[slideIndex].classList.remove('active');
+  slideIndex=Math.min(slideIndex+1,slides.length-1);
+  slides[slideIndex].classList.add('active');
+  if(slideIndex===slides.length-1) document.getElementById('slideshow-done').style.display='inline-block';
+});
+document.getElementById('prev-slide').addEventListener('click',()=>{
+  slides[slideIndex].classList.remove('active');
+  slideIndex=Math.max(slideIndex-1,0);
+  slides[slideIndex].classList.add('active');
+});
+document.getElementById('slideshow-done').addEventListener('click',()=>{showStep(1);});
+
+/* Swipe present */
+const present=document.getElementById('present');
+let presentDone=false;
+let startX;
+present.addEventListener('pointerdown',e=>{startX=e.clientX; present.setPointerCapture(e.pointerId);});
+present.addEventListener('pointermove',e=>{
+  if(!presentDone && startX!==undefined){
+    let dx=e.clientX-startX;
+    present.style.transform=`translateX(${dx}px)`;
+    if(Math.abs(dx)>100){presentDone=true; present.querySelector('.present-note').style.opacity=1; document.getElementById('present-done').style.display='inline-block';}
+  }
+});
+present.addEventListener('pointerup',()=>{present.style.transform=`translateX(0)`; startX=undefined;});
+document.getElementById('present-done').addEventListener('click',()=>{showStep(2);});
+
+/* Tap star */
+const star=document.getElementById('star');
+star.addEventListener('click',()=>{
+  star.style.transform='scale(2)';
+  setTimeout(()=>{star.style.transform='scale(1)'; document.getElementById('star-message').style.opacity=1; document.getElementById('star-done').style.display='inline-block';},300);
+});
+document.getElementById('star-done').addEventListener('click',()=>{showStep(3); animateConstellation();});
+
+/* Constellation */
+const constellationDots=document.querySelectorAll('.star-dot');
+const nameText=document.getElementById('name-text');
+let dotIndex=0;
+function animateConstellation(){
+  dotIndex = 0;
+  function step(){
+    if(dotIndex<constellationDots.length){constellationDots[dotIndex].style.opacity=1; dotIndex++; setTimeout(step,400);}
+    else{nameText.style.opacity=1; document.getElementById('constellation-done').style.display='inline-block';}
+  }
+  step();
+}
+document.getElementById('constellation-done').addEventListener('click',()=>{showStep(4);});
+
+/* Handwritten Letter */
+const letterText = `My love,  
+Every moment with you feels like a dream come true.  
+I’ve hidden little memories, laughter, and love for you in this calendar.  
+I hope this journey has made you smile as much as you make me smile every day.  
+Merry Christmas, my darling ❤️`;
+let i = 0;
+const letterEl = document.getElementById('letter-text');
+function typeLetter() {
+  if(i < letterText.length) {
+    letterEl.innerHTML += letterText.charAt(i).replace(/\n/g,'<br>');
+    i++;
+    setTimeout(typeLetter, 50);
+  }
+}
+document.getElementById('letter-done').addEventListener('click',()=>{alert("Merry Christmas ❤️");});
+</script>
+</body>
+</html>

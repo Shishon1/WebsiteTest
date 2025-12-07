@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opening Your Gift… 🎁</title>
+<style>
+  body {
+    margin: 0;
+    background: #140016;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    font-family: "Poppins", sans-serif;
+  }
+
+  .gift-box {
+    width: 180px;
+    height: 180px;
+    background: url('gift.png') center/contain no-repeat;
+    animation: shake 1.2s infinite ease-in-out;
+    position: relative;
+  }
+
+  @keyframes shake {
+    0% { transform: rotate(0deg) scale(1); }
+    20% { transform: rotate(-6deg) scale(1.02); }
+    40% { transform: rotate(6deg) scale(1.02); }
+    60% { transform: rotate(-3deg) scale(1.05); }
+    80% { transform: rotate(3deg) scale(1.05); }
+    100% { transform: rotate(0deg) scale(1); }
+  }
+
+  /* Sparkle particles */
+  .sparkle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, white, transparent);
+    border-radius: 50%;
+    opacity: 0;
+    animation: sparkle 1.8s infinite ease-out;
+  }
+
+  @keyframes sparkle {
+    0% { opacity: 0; transform: scale(0.2) translate(0,0); }
+    20% { opacity: 1; }
+    100% { opacity: 0; transform: scale(1.4) translate(var(--x), var(--y)); }
+  }
+
+  h2 {
+    position: absolute;
+    bottom: 60px;
+    color: white;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    opacity: 0.8;
+    text-shadow: 0 0 10px rgba(255, 200, 255, 0.6);
+  }
+</style>
+</head>
+<body>
+
+<div class="gift-box"></div>
+<h2>Opening your surprise…</h2>
+
+<script>
+  // Create sparkle particles
+  for (let i = 0; i < 25; i++) {
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    s.style.setProperty("--x", `${Math.random()*200 - 100}px`);
+    s.style.setProperty("--y", `${Math.random()*200 - 100}px`);
+    s.style.left = "50%";
+    s.style.top = "50%";
+    s.style.transform = "translate(-50%, -50%)";
+    s.style.animationDelay = `${Math.random()*1.5}s`;
+    document.body.appendChild(s);
+  }
+
+  // Redirect to the special page after animation
+  setTimeout(() => {
+    window.location.href = "day24.html";
+  }, 2800);
+</script>
+
+</body>
+</html>

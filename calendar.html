@@ -158,7 +158,7 @@
     width:100%;
     height:360px;
     background-position:center;
-    background-size:cover;
+    background-size:contain;
     position:relative;
   }
   .card .body{
@@ -223,33 +223,36 @@ if(sessionStorage.getItem("authed") === "true"){
 // img should point to calendar/boxes/boxN.jpg (you'll supply these files).
 const contents = [
   /* index 0 -> day 1 */
-  { title: "Day 1", message: "Welcome to our special Advent! Open a box each day to find notes and maybe even tiny tasks.", task: "Share a photo of something that made you smile today.", img: "952-9520723_ftestickers-heart-lighteffect-luminous-pink-heart-1756494695.png" },
-  { title: "Day 2", message: "Every time I see your smile, I feel like the luckiest person alive. You make even ordinary days feel magical.", task: "Give me three things you love about us..", img: "952-9520723_ftestickers-heart-lighteffect-luminous-pink-heart-1756494695.png" },
-  { title: "Day 3", message: "I adore the little quirks that make you so unique. They make you, you, and I wouldn’t change a single thing.", task: "Share a photo of something that made you smile today.", img: "952-9520723_ftestickers-heart-lighteffect-luminous-pink-heart-1756494695.png" },
-  { title: "Day 4", message: "A tiny promise: coffee date soon?", task: "Take a 5 minute walk and text me a photo of something beautiful..", img: "calendar/boxes/box4.jpg" },
-  { title: "Day 5", message: "You mean the world to me.", task: "Give me three things you love about us.", img: "calendar/boxes/box5.jpg" },
-  { title: "Day 6", message: "Little reminder: breathe & smile.", task: "Take a 5 minute walk and text me a photo of something beautiful.", img: "calendar/boxes/box6.jpg" },
-  { title: "Day 7", message: "Weekend memory incoming.", task: "Plan a mini-date for this weekend and tell me one detail.", img: "calendar/boxes/box7.jpg" },
-  { title: "Day 8", message: "You brighten my days.", task: "Send me an emoji that sums up your day.", img: "calendar/boxes/box8.jpg" },
-  { title: "Day 9", message: "A tiny challenge: be silly.", task: "Record a 10s silly dance video and send it to me.", img: "calendar/boxes/box9.jpg" },
-  { title: "Day 10", message: "Hope you feel loved today.", task: "Write me one sentence about your favorite memory of us.", img: "calendar/boxes/box10.jpg" },
-  { title: "Day 11", message: "Mid-advent surprise!", task: "Share a photo of something that smells nice.", img: "calendar/boxes/box11.jpg" },
-  { title: "Day 12", message: "Small confession: I still get butterflies.", task: "Tell me what makes you feel butterflies.", img: "calendar/boxes/box12.jpg" },
-  { title: "Day 13", message: "Halfway to the big day.", task: "Send a song that reminds you of us.", img: "calendar/boxes/box13.jpg" },
-  { title: "Day 14", message: "Cozy night idea.", task: "Pick a movie for a cozy night in.", img: "calendar/boxes/box14.jpg" },
-  { title: "Day 15", message: "I love your smile.", task: "Send a selfie with your brightest smile.", img: "calendar/boxes/box15.jpg" },
-  { title: "Day 16", message: "A memory of our trip.", task: "Tell me one small detail you remember from our favorite trip.", img: "calendar/boxes/box16.jpg" },
-  { title: "Day 17", message: "Tiny warm hug through the screen.", task: "Describe your perfect warm drink.", img: "calendar/boxes/box17.jpg" },
-  { title: "Day 18", message: "A playful challenge.", task: "Send me your best knock-knock joke!", img: "calendar/boxes/box18.jpg" },
-  { title: "Day 19", message: "You are my favorite person to do nothing with.", task: "Tell me what 'doing nothing' with me feels like to you.", img: "calendar/boxes/box19.jpg" },
-  { title: "Day 20", message: "Almost there — little treats ahead.", task: "Name one small thing I can do to brighten your day tomorrow.", img: "calendar/boxes/box20.jpg" },
-  { title: "Day 21", message: "A special photo memory.", task: "Find and send the earliest photo we have together.", img: "calendar/boxes/box21.jpg" },
-  { title: "Day 22", message: "The final stretch.", task: "Tell me one thing you want us to do next year.", img: "calendar/boxes/box22.jpg" },
-  { title: "Day 23", message: "A note before the big day.", task: "Write a one-line love note for me right now.", img: "calendar/boxes/box23.jpg" },
-  { title: "Day 24", message: "Merry Christmas — open your final surprise ❤️", task: "Call me when you open this one.", img: "calendar/boxes/box24.jpg" }
+  { title: "Day 1", message: "Welcome to our special Advent! Open a box each day to find notes and maybe even tiny tasks.", task: "Share a photo of something that made you smile today.", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 2", message: "Every time I see your smile, I feel like the luckiest person alive. You make even ordinary days feel magical.", task: "Give me three things you love about us..", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 3", message: "I adore the little quirks that make you so unique. They make you, you, and I wouldn’t change a single thing.", task: "Share a photo of something that made you smile today.", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 4", message: "A tiny promise: coffee date soon?", task: "Take a 5 minute walk and text me a photo of something beautiful..", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 5", message: "You mean the world to me.", task: "Tell me one thing you want us to do next year.", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 6", message: "Wherever you are, that place instantly becomes my favorite place.", task: "Write me one or a few sentences about your favorite memory of us.", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 7", message: "My love, just a reminder that waking up and knowing you’re mine makes every day brighter.", task: "Write down 3 things that made you happy today", img: "christmas-background-9189884_1280-2814823969.jpg"},
+  { title: "Day 8", message: "I’m proud of you. For everything you’ve done and everything you’re becoming", task: "Send me an emoji that sums up your day.", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 9", message: "You are my comfort and my chaos in the most beautiful balance", task: "Tell me one thing you’re proud of yourself for today.", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 10", message: "Hope you feel loved today.", task: "Share a dream you had recently", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 11", message: "If hugs could be sent through letters, you’d be wrapped in one right now.", task: "Share a photo of something that smells nice.", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 12", message: "Small confession: I still get butterflies when im about to greet you in the airport", task: "Tell me what makes you feel butterflies.", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 13", message: "Thank you for loving me in ways I didn’t even know I needed.", task: "Send a song that reminds you of us. (not iris thats obvious)", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 14", message: "I still get excited when I think about seeing you next.", task: "Take a pic of the sky right now and send it to me.", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 15", message: "I love your smile.", task: "Drink a glass of water and text me “mission complete.”", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 16", message: "Your love is my favorite gift. I never take it for granted.", task: "Tell me one small detail you remember from our first meetup", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 17", message: "You make me feel at home, no matter where we are.", task: "Describe your day using only three words.", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 18", message: "Just checking in to remind you that you mean the entire world to me. I love you more than you know.", task: "Tell me one thing you’re excited for in the future.", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 19", message: "You are my favorite person to do nothing with.", task: "Tell me what 'doing nothing' with me feels like to you.", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 20", message: "If I could give you one thing today, it would be the chance to see yourself the way I see you.", task: "Name one small thing I can do to brighten your day tomorrow.", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 21", message: "Every moment with you is a little reminder that real love exists. And I’m so grateful it found us.", task: "Find and send the earliest photo we have together.", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 22", message: "You make even the toughest days feel conquerable just by being in my corner.", task: "Close your eyes and think of me for 5 seconds, tell me what came to mind.", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 23", message: "A note before the big day. Prepare yourself for tomorrow!", task: "Write a one-line or more (i dont mind) love note for me right now.", img: "christmas-background-9189884_1280-2814823969.jpg" },
+  { title: "Day 24", message: "Merry Christmas! open your final surprise ❤️", task: "", img: "christmas-background-9189884_1280-2814823969.jpg", special : true }
 ];
 
 // -----------------------------------------
+
+
+
 
 // helper: check if a day is unlocked (real life date check)
 // Only unlock Dec 1..24 of the current year.
@@ -392,6 +395,22 @@ function openDay(day) {
   modalEl.querySelector('#modal-title').textContent = info.title;
   modalEl.querySelector('#modal-message').textContent = info.message;
   modalEl.querySelector('#modal-task').textContent = info.task ? `Task: ${info.task}` : '';
+  // SPECIAL DAY 24 BUTTON
+if(info.special){
+    modalEl.querySelector('#modal-task').innerHTML = `
+        <button class="btn" id="open-special">Open Your Christmas Surprise 🎁</button>
+    `;
+
+    setTimeout(() => {
+        const btn = document.getElementById("open-special");
+        if(btn){
+            btn.addEventListener("click", () => {
+                window.location.href = "open24.html";
+            });
+        }
+    }, 50);
+}
+
 
   // load image (with fallback)
   const media = modalEl.querySelector('#modal-media');
